@@ -1,4 +1,4 @@
-import { RegisterForm } from "../../features/Register"
+import { RegisterForm } from "../../features/RegisterForm"
 
 export const RegisterPage = () => {
   return <RegisterForm />

@@ -1,5 +1,5 @@
 import { Routing } from "./providers/Routing"
-import "./sass/index.scss"
+import "../shared/ui/sass/index.scss"
 
 export const App = () => {
   return <Routing />

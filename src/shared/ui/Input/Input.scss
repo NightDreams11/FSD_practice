@@ -1,0 +1,28 @@
+.input {
+  position: relative;
+  width: 100%;
+}
+
+.input__input {
+  height: 50px;
+  border: 1px solid rgb(152, 165, 184);
+  border-radius: 15px;
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: 0.02em;
+}
+
+.input__input:focus {
+  outline: none;
+}
+
+.input__error {
+  position: absolute;
+  bottom: -20px;
+  left: 15px;
+  font-size: 14px;
+  color: rgb(202, 8, 8);
+}
