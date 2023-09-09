@@ -1,8 +1,8 @@
 import { FC, useState } from "react"
-import { Button } from "../../../../shared/ui/Button"
 import { Step } from "../Step/Step"
 import { useFormik } from "formik"
 import { InitialFormikValues } from "../../lib/types"
+import { Button } from "../../../../shared/ui"
 import * as Yup from "yup"
 import "./Form.scss"
 

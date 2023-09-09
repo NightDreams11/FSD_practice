@@ -1,6 +1,6 @@
 import { ChangeEvent, FC } from "react"
-import { Input } from "../../../../shared/ui/Input"
 import { FieldName, Formik, InitialFormikValues } from "../../lib/types"
+import { Input } from "../../../../shared/ui"
 
 type Props = {
   next?: boolean

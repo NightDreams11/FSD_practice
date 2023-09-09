@@ -1,7 +1,7 @@
 import createSagaMiddleware from "redux-saga"
 import { configureStore } from "@reduxjs/toolkit"
-import { userSlice } from "../../enteties/user/model/userSlice"
-import { rootSaga } from "../../shared/model/saga"
+import { rootSaga } from "../saga"
+import { userSlice } from "../../enteties/user"
 
 let sagaMiddleware = createSagaMiddleware()
 
