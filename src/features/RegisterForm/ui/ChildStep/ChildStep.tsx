@@ -1,13 +1,29 @@
-import { ChangeEvent, FC } from "react"
+import { ChangeEvent, FC, useEffect } from "react"
 import { FieldName, Formik, InitialFormikValues } from "../../lib/types"
 import { Input } from "../../../../shared/ui"
 import { getIn } from "formik"
+import { useHandleUpload } from "../../lib/useHandleUpload"
 
 type Props = {
+  isFullfilled: (value: boolean) => void
   formik: Formik<InitialFormikValues>
 }
 
-export const ChildStep: FC<Props> = ({ formik }) => {
+export const ChildStep: FC<Props> = ({ formik, isFullfilled }) => {
+  const [setFileList] = useHandleUpload()
+
+  useEffect(() => {
+    isFullfilled(
+      !!formik.values.child.name &&
+        !!formik.values.child.surname &&
+        !!formik.values.child.email &&
+        !!formik.values.child.password &&
+        !!formik.values.child.passwordConfirmation &&
+        formik.values.child.password ===
+          formik.values.child.passwordConfirmation
+    )
+  }, [formik.values.child, isFullfilled])
+
   const handleName = (e: ChangeEvent<HTMLInputElement>) => {
     formik.setFieldValue("child.name", e.target.value)
   }
@@ -20,8 +36,14 @@ export const ChildStep: FC<Props> = ({ formik }) => {
   const handlePassword = (e: ChangeEvent<HTMLInputElement>) => {
     formik.setFieldValue("child.password", e.target.value)
   }
+  const handleConfirmPassword = (e: ChangeEvent<HTMLInputElement>) => {
+    formik.setFieldValue("child.passwordConfirmation", e.target.value)
+  }
   const handleEmail = (e: ChangeEvent<HTMLInputElement>) => {
     formik.setFieldValue("child.email", e.target.value)
+  }
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFileList(e.target.files)
   }
 
   const isError = (fieldName: FieldName) => {
@@ -83,8 +105,16 @@ export const ChildStep: FC<Props> = ({ formik }) => {
         onChange={handlePassword}
         onBlur={formik.handleBlur}
       />
-      <Input type="password" placeholder="Confirm your password" />
-      <Input type="file" />
+      <Input
+        type="password"
+        name="passwordConfirmation"
+        placeholder="Confirm your password"
+        error={isError("passwordConfirmation")}
+        value={formik.values.child.passwordConfirmation}
+        onChange={handleConfirmPassword}
+        onBlur={formik.handleBlur}
+      />
+      <Input type="file" multiple onChange={handleFileChange} />
     </>
   )
 }

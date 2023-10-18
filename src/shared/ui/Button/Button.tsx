@@ -1,15 +1,16 @@
 import { FC } from "react"
 
 type Props = {
-  text: string
   disabled?: boolean
+  type?: "button" | "submit" | "reset"
   onClick?: React.MouseEventHandler<HTMLButtonElement>
+  children: React.ReactNode
 }
 
-export const Button: FC<Props> = ({ text, disabled, onClick }) => {
+export const Button: FC<Props> = ({ disabled, type, onClick, children }) => {
   return (
-    <button onClick={onClick} disabled={disabled}>
-      {text}
+    <button onClick={onClick} disabled={disabled} type={type}>
+      {children}
     </button>
   )
 }

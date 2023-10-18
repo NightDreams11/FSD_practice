@@ -1,13 +1,29 @@
-import { ChangeEvent, FC } from "react"
+import { ChangeEvent, FC, useEffect } from "react"
 import { FieldName, Formik, InitialFormikValues } from "../../lib/types"
 import { Input } from "../../../../shared/ui"
 import { getIn } from "formik"
+import { useHandleUpload } from "../../lib/useHandleUpload"
 
 type Props = {
+  isFullfilled: (value: boolean) => void
   formik: Formik<InitialFormikValues>
 }
 
-export const ParentStep: FC<Props> = ({ formik }) => {
+export const ParentStep: FC<Props> = ({ formik, isFullfilled }) => {
+  const [setFileList] = useHandleUpload()
+
+  useEffect(() => {
+    isFullfilled(
+      !!formik.values.parent.name &&
+        !!formik.values.parent.surname &&
+        !!formik.values.parent.email &&
+        !!formik.values.parent.password &&
+        !!formik.values.parent.passwordConfirmation &&
+        formik.values.parent.password ===
+          formik.values.parent.passwordConfirmation
+    )
+  }, [formik.values.parent, isFullfilled])
+
   const handleName = (e: ChangeEvent<HTMLInputElement>) => {
     formik.setFieldValue("parent.name", e.target.value)
   }
@@ -20,8 +36,14 @@ export const ParentStep: FC<Props> = ({ formik }) => {
   const handlePassword = (e: ChangeEvent<HTMLInputElement>) => {
     formik.setFieldValue("parent.password", e.target.value)
   }
+  const handleConfirmPassword = (e: ChangeEvent<HTMLInputElement>) => {
+    formik.setFieldValue("parent.passwordConfirmation", e.target.value)
+  }
   const handleEmail = (e: ChangeEvent<HTMLInputElement>) => {
     formik.setFieldValue("parent.email", e.target.value)
+  }
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFileList(e.target.files)
   }
 
   const isError = (fieldName: FieldName) => {
@@ -29,8 +51,8 @@ export const ParentStep: FC<Props> = ({ formik }) => {
     // If you want to get touched.child.name it always equals undefind.
     // The way to get value is using getIn
     if (getIn(formik.touched, fieldName)) {
-      if (formik.errors.child) {
-        return formik.errors.child[fieldName]
+      if (formik.errors.parent) {
+        return formik.errors.parent[fieldName]
       }
     }
   }
@@ -83,8 +105,16 @@ export const ParentStep: FC<Props> = ({ formik }) => {
         onChange={handlePassword}
         onBlur={formik.handleBlur}
       />
-      <Input type="password" placeholder="Confirm your password" />
-      <Input type="file" />
+      <Input
+        type="password"
+        name="passwordConfirmation"
+        placeholder="Confirm your password"
+        value={formik.values.parent.passwordConfirmation}
+        error={isError("passwordConfirmation")}
+        onChange={handleConfirmPassword}
+        onBlur={formik.handleBlur}
+      />
+      <Input type="file" multiple onChange={handleFileChange} />
     </>
   )
 }

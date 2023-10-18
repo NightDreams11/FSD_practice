@@ -10,6 +10,7 @@ export type InitialFormikValues = {
     documents: string
     email: string
     password: string
+    passwordConfirmation: string
   }
   child: {
     name: string
@@ -18,6 +19,7 @@ export type InitialFormikValues = {
     documents: string
     email: string
     password: string
+    passwordConfirmation: string
   }
 }
 
@@ -28,3 +30,4 @@ export type FieldName =
   | "documents"
   | "email"
   | "password"
+  | "passwordConfirmation"

@@ -18,7 +18,8 @@
       "resolveJsonModule": true,
       "isolatedModules": true,
       "noEmit": true,
-      "jsx": "react-jsx"
+      "jsx": "react-jsx",
+      "downlevelIteration": true // solve issue with FormData
     },
     "include": [
       "src"

@@ -1,85 +1,55 @@
 import { FC, useState } from "react"
 import { ChildStep } from "../ChildStep/ChildStep"
-import { useFormik } from "formik"
-import { InitialFormikValues } from "../../lib/types"
 import { Button } from "../../../../shared/ui"
 import { ParentStep } from "../ParentStep/ParentStep"
-import * as Yup from "yup"
+import { useFormikHook } from "../../lib/useFormikHook"
 import "./Form.scss"
 
 export const Form: FC = () => {
   const [step, setStep] = useState(1)
-
-  const validationSchema = Yup.object({
-    parent: Yup.object({
-      name: Yup.string()
-        .required("Field is required")
-        .min(2, "Minimum 2 symbols"),
-      surname: Yup.string()
-        .required("Field is required")
-        .min(2, "Minimum 2 symbols"),
-      patronymic: Yup.string().min(2, "Minimum 2 symbols"),
-      password: Yup.string()
-        .required("Field is required")
-        .min(5, "Minimum 5 symbols"),
-      email: Yup.string().email("Invalid email").required("Field is required"),
-    }),
-    child: Yup.object({
-      name: Yup.string()
-        .required("Field is required")
-        .min(2, "Minimum 2 symbols"),
-      surname: Yup.string()
-        .required("Field is required")
-        .min(2, "Minimum 2 symbols"),
-      patronymic: Yup.string().min(2, "Minimum 2 symbols"),
-      password: Yup.string()
-        .required("Field is required")
-        .min(5, "Minimum 5 symbols"),
-      email: Yup.string().email("Invalid email").required("Field is required"),
-    }),
-  })
-
-  const formik = useFormik<InitialFormikValues>({
-    initialValues: {
-      parent: {
-        name: "",
-        surname: "",
-        patronymic: "",
-        email: "",
-        password: "",
-        documents: "",
-      },
-      child: {
-        name: "",
-        surname: "",
-        patronymic: "",
-        email: "",
-        password: "",
-        documents: "",
-      },
-    },
-    validationSchema,
-    validateOnBlur: true,
-    onSubmit: (value) => {},
-  })
+  const [isChildFulfilled, setIsChildFulfilled] = useState(false)
+  const [isParentFulfilled, setIsParentFulfilled] = useState(false)
+  const formik = useFormikHook()
 
   const nextStep = () => {
-    setStep(step + 1)
+    if (step < 2) {
+      setStep(step + 1)
+    }
+  }
+  const previousStep = () => {
+    if (step !== 1) {
+      setStep(step - 1)
+    }
   }
 
   const registerStep = () => {
     switch (step) {
       case 1:
-        return <ChildStep formik={formik} />
+        return <ChildStep formik={formik} isFullfilled={setIsChildFulfilled} />
       case 2:
-        return <ParentStep formik={formik} />
+        return (
+          <ParentStep formik={formik} isFullfilled={setIsParentFulfilled} />
+        )
     }
   }
 
   return (
     <form className="register-form-body" onSubmit={formik.handleSubmit}>
       {registerStep()}
-      <Button text="Next" onClick={nextStep} />
+      <div className="register-form-body__buttons">
+        <Button type="submit" onClick={previousStep}>
+          Previous
+        </Button>
+        <Button type="submit" disabled={!isChildFulfilled} onClick={nextStep}>
+          Next
+        </Button>
+        <Button
+          disabled={!isChildFulfilled || !isParentFulfilled}
+          type="submit"
+        >
+          Submit
+        </Button>
+      </div>
     </form>
   )
 }

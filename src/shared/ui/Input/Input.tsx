@@ -7,6 +7,7 @@ type Props = {
   name?: string
   value?: string | number | readonly string[]
   error?: string
+  multiple?: boolean
   onChange?: React.ChangeEventHandler<HTMLInputElement>
   onFocus?: React.FocusEventHandler<HTMLInputElement>
   onBlur?: React.FocusEventHandler<HTMLInputElement>
@@ -18,6 +19,7 @@ export const Input: FC<Props> = ({
   placeholder,
   value,
   error,
+  multiple,
   onChange,
   onFocus,
   onBlur,
@@ -30,6 +32,7 @@ export const Input: FC<Props> = ({
         placeholder={placeholder}
         value={value}
         type={type}
+        multiple={multiple}
         onChange={onChange}
         onFocus={onFocus}
         onBlur={onBlur}
